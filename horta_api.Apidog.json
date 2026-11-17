@@ -1,0 +1,1663 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API Horta Familiar",
+    "description": "API para gestão de uma Horta Familiar, incluindo controle de usuários, culturas, canteiros, insumos, plantios e tarefas.",
+    "version": "1.0.0"
+  },
+  "tags": [
+    {
+      "name": "Usuarios"
+    },
+    {
+      "name": "Culturas"
+    },
+    {
+      "name": "Canteiros"
+    },
+    {
+      "name": "Insumos"
+    },
+    {
+      "name": "Plantios"
+    },
+    {
+      "name": "Tarefas"
+    },
+    {
+      "name": "Dashboard"
+    }
+  ],
+  "paths": {
+    "/usuarios": {
+      "get": {
+        "summary": "Lista todos os usuários",
+        "deprecated": false,
+        "description": "Retorna uma lista com todos os usuários cadastrados no sistema, incluindo seus perfis de acesso (ADMIN ou OPERACIONAL).",
+        "tags": [
+          "Usuarios"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Lista de usuários",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Usuario"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "post": {
+        "summary": "Cria um novo usuário",
+        "deprecated": false,
+        "description": "Cadastra um novo usuário no sistema. O email deve ser único e a senha será armazenada de forma segura (hash).",
+        "tags": [
+          "Usuarios"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsuarioInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Usuário criado com sucesso",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/usuarios/{id}": {
+      "get": {
+        "summary": "Busca um usuário pelo ID",
+        "deprecated": false,
+        "description": "Recupera os detalhes de um usuário específico informando o seu ID na URL.",
+        "tags": [
+          "Usuarios"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único (ID) do recurso primário.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Usuario"
+                }
+              }
+            },
+            "headers": {}
+          },
+          "404": {
+            "description": "Usuário não encontrado",
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "put": {
+        "summary": "Atualiza um usuário",
+        "deprecated": false,
+        "description": "Atualiza os dados de um usuário existente, como nome, email, senha ou perfil.",
+        "tags": [
+          "Usuarios"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único (ID) do recurso primário.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsuarioInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Usuário atualizado com sucesso",
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "delete": {
+        "summary": "Deleta um usuário",
+        "deprecated": false,
+        "description": "Remove um usuário do sistema permanentemente baseado no seu ID.",
+        "tags": [
+          "Usuarios"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único (ID) do recurso primário.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Usuário deletado com sucesso",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/culturas": {
+      "get": {
+        "summary": "Lista todas as culturas",
+        "deprecated": false,
+        "description": "Retorna uma lista de todas as culturas agrícolas cadastradas, incluindo tempo de maturação e espaçamento ideal.",
+        "tags": [
+          "Culturas"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Cultura"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "post": {
+        "summary": "Cria uma nova cultura",
+        "deprecated": false,
+        "description": "Cadastra uma nova cultura no sistema. O nome da cultura deve ser único.",
+        "tags": [
+          "Culturas"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CulturaInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Cultura criada com sucesso",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/culturas/{id}": {
+      "get": {
+        "summary": "Busca uma cultura pelo ID",
+        "deprecated": false,
+        "description": "Recupera os detalhes técnicos de uma cultura específica (dias para maturação, espaçamento, etc).",
+        "tags": [
+          "Culturas"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único (ID) do recurso primário.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cultura"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "put": {
+        "summary": "Atualiza uma cultura",
+        "deprecated": false,
+        "description": "Modifica as informações de uma cultura previamente cadastrada.",
+        "tags": [
+          "Culturas"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único (ID) do recurso primário.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CulturaInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Cultura atualizada com sucesso",
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "delete": {
+        "summary": "Deleta uma cultura",
+        "deprecated": false,
+        "description": "Remove uma cultura do catálogo. (Falhará caso haja plantios vinculados a esta cultura).",
+        "tags": [
+          "Culturas"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único (ID) do recurso primário.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Cultura deletada com sucesso",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/canteiros": {
+      "get": {
+        "summary": "Lista canteiros",
+        "deprecated": false,
+        "description": "Obtém a lista de todos os canteiros da horta, juntamente com suas respectivas áreas (em metros quadrados).",
+        "tags": [
+          "Canteiros"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Canteiro"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "post": {
+        "summary": "Cria canteiro",
+        "deprecated": false,
+        "description": "Registra um novo canteiro. A identificação (nome) deve ser única no sistema.",
+        "tags": [
+          "Canteiros"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CanteiroInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Canteiro criado com sucesso",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/canteiros/{id}": {
+      "get": {
+        "summary": "Busca um canteiro pelo ID",
+        "deprecated": false,
+        "description": "Traz as informações detalhadas de um canteiro específico.",
+        "tags": [
+          "Canteiros"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único (ID) do recurso primário.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Canteiro"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "put": {
+        "summary": "Atualiza um canteiro",
+        "deprecated": false,
+        "description": "Altera os dados de um canteiro (por exemplo, mudando a identificação ou corrigindo a área).",
+        "tags": [
+          "Canteiros"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único (ID) do recurso primário.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CanteiroInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Canteiro atualizado com sucesso",
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "delete": {
+        "summary": "Deleta um canteiro",
+        "deprecated": false,
+        "description": "Exclui o registro de um canteiro. (Falhará caso haja plantios ou tarefas associadas a ele).",
+        "tags": [
+          "Canteiros"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único (ID) do recurso primário.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Canteiro deletado com sucesso",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/insumos": {
+      "get": {
+        "summary": "Lista insumos",
+        "deprecated": false,
+        "description": "Mostra todos os insumos cadastrados (sementes, fertilizantes, ferramentas) com a quantidade atual em estoque.",
+        "tags": [
+          "Insumos"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Insumo"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "post": {
+        "summary": "Cria insumo",
+        "deprecated": false,
+        "description": "Adiciona um novo insumo ao estoque. Define tipo, estoque atual e limite de estoque mínimo.",
+        "tags": [
+          "Insumos"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InsumoInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Insumo criado com sucesso",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/insumos/{id}": {
+      "get": {
+        "summary": "Busca insumo pelo ID",
+        "deprecated": false,
+        "description": "Retorna o detalhamento de um insumo específico e seu estoque.",
+        "tags": [
+          "Insumos"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único (ID) do recurso primário.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Insumo"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "put": {
+        "summary": "Atualiza um insumo",
+        "deprecated": false,
+        "description": "Altera dados cadastrais de um insumo (nome, tipo, estoque base e limite mínimo).",
+        "tags": [
+          "Insumos"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único (ID) do recurso primário.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InsumoInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Insumo atualizado com sucesso",
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "delete": {
+        "summary": "Deleta um insumo",
+        "deprecated": false,
+        "description": "Exclui um insumo do catálogo. (Falhará se já tiver sido usado em tarefas ou plantios).",
+        "tags": [
+          "Insumos"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único (ID) do recurso primário.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Insumo deletado com sucesso",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/plantios": {
+      "get": {
+        "summary": "Lista plantios",
+        "deprecated": false,
+        "description": "Lista o histórico e os registros ativos de plantios, mostrando o status atual (CRESCIMENTO, COLHIDO ou PERDIDO).",
+        "tags": [
+          "Plantios"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Plantio"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "post": {
+        "summary": "Cria plantio",
+        "deprecated": false,
+        "description": "Registra o início de um novo plantio, associando uma cultura a um canteiro numa data específica.",
+        "tags": [
+          "Plantios"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlantioInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Plantio criado com sucesso",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/plantios/{id}": {
+      "get": {
+        "summary": "Busca plantio pelo ID",
+        "deprecated": false,
+        "description": "Retorna os detalhes de um plantio específico, incluindo status e peso colhido.",
+        "tags": [
+          "Plantios"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único (ID) do recurso primário.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Plantio"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "put": {
+        "summary": "Atualiza um plantio",
+        "deprecated": false,
+        "description": "Modifica os dados de um plantio (geralmente usado para mudar o status para 'COLHIDO' e registrar o 'peso_colhido').",
+        "tags": [
+          "Plantios"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único (ID) do recurso primário.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlantioInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Plantio atualizado com sucesso",
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "delete": {
+        "summary": "Deleta um plantio",
+        "deprecated": false,
+        "description": "Remove um registro de plantio da base de dados.",
+        "tags": [
+          "Plantios"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único (ID) do recurso primário.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Plantio deletado com sucesso",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/plantios/{id}/insumos": {
+      "get": {
+        "summary": "Lista insumos usados no plantio",
+        "deprecated": false,
+        "description": "Recupera todos os insumos (sementes, mudas, etc) associados e consumidos neste plantio específico.",
+        "tags": [
+          "Plantios"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único (ID) do recurso primário.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlantioInsumo"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "post": {
+        "summary": "Vincula um insumo ao plantio",
+        "deprecated": false,
+        "description": "Registra a utilização de um insumo neste plantio. Esta ação dispara automaticamente uma trigger que desconta a quantidade usada do estoque da tabela de Insumos.",
+        "tags": [
+          "Plantios"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único (ID) do recurso primário.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InsumoUsoInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Insumo vinculado (estoque atualizado)",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/plantios/{id}/insumos/{id_insumo}": {
+      "delete": {
+        "summary": "Remove um insumo do plantio (estorna estoque)",
+        "deprecated": false,
+        "description": "Desvincula um insumo de um plantio. Dispara automaticamente uma trigger no banco de dados que devolve a quantidade utilizada para o estoque.",
+        "tags": [
+          "Plantios"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único (ID) do recurso primário.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "id_insumo",
+            "in": "path",
+            "description": "Identificador único (ID) do insumo.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Desvinculado com sucesso",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/tarefas": {
+      "get": {
+        "summary": "Lista tarefas",
+        "deprecated": false,
+        "description": "Traz a lista completa de tarefas da horta agendadas ou concluídas pelos usuários (operadores).",
+        "tags": [
+          "Tarefas"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Tarefa"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "post": {
+        "summary": "Cria tarefa",
+        "deprecated": false,
+        "description": "Agenda uma nova tarefa. A API retornará erro se o banco de dados detectar um conflito de horários para o mesmo canteiro (garantido pela restrição btree_gist).",
+        "tags": [
+          "Tarefas"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TarefaInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Tarefa criada com sucesso",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/tarefas/{id}": {
+      "get": {
+        "summary": "Busca tarefa pelo ID",
+        "deprecated": false,
+        "description": "Retorna os detalhes, horários e status (PENDENTE, CONCLUIDA, CANCELADA) de uma tarefa específica.",
+        "tags": [
+          "Tarefas"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único (ID) do recurso primário.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tarefa"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "put": {
+        "summary": "Atualiza uma tarefa",
+        "deprecated": false,
+        "description": "Edita os dados de uma tarefa, como o encerramento dela (mudando para 'CONCLUIDA') ou ajuste de horários.",
+        "tags": [
+          "Tarefas"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único (ID) do recurso primário.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TarefaInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Tarefa atualizada com sucesso",
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "delete": {
+        "summary": "Deleta uma tarefa",
+        "deprecated": false,
+        "description": "Remove uma tarefa do sistema permanentemente.",
+        "tags": [
+          "Tarefas"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único (ID) do recurso primário.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Tarefa deletada com sucesso",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/tarefas/{id}/insumos": {
+      "get": {
+        "summary": "Lista insumos usados na tarefa",
+        "deprecated": false,
+        "description": "Retorna todos os insumos (fertilizantes, pesticidas, etc) que foram gastos nesta tarefa.",
+        "tags": [
+          "Tarefas"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único (ID) do recurso primário.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TarefaInsumo"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "post": {
+        "summary": "Vincula um insumo à tarefa",
+        "deprecated": false,
+        "description": "Registra o uso de um insumo durante a execução de uma tarefa. Isso fará com que o estoque do insumo no sistema diminua automaticamente via trigger.",
+        "tags": [
+          "Tarefas"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único (ID) do recurso primário.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InsumoUsoInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Insumo vinculado (estoque atualizado)",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/tarefas/{id}/insumos/{id_insumo}": {
+      "delete": {
+        "summary": "Remove um insumo da tarefa (estorna estoque)",
+        "deprecated": false,
+        "description": "Remove a associação de um insumo com a tarefa. Esta ação estorna a quantidade utilizada, repondo-a de volta no estoque via trigger de banco.",
+        "tags": [
+          "Tarefas"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único (ID) do recurso primário.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "id_insumo",
+            "in": "path",
+            "description": "Identificador único (ID) do insumo.",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Desvinculado com sucesso",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/dashboard/producao": {
+      "get": {
+        "summary": "Relatório de produção consolidado",
+        "deprecated": false,
+        "description": "Retorna os dados da view 'vw_dashboard_producao'. Mostra de forma agregada a quantidade de plantios concluídos e o peso total colhido agrupados por cultura e canteiro.",
+        "tags": [
+          "Dashboard"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "cultura": {
+                        "type": "string",
+                        "description": "Nome da cultura"
+                      },
+                      "canteiro": {
+                        "type": "string",
+                        "description": "Identificação do canteiro"
+                      },
+                      "total_plantios": {
+                        "type": "integer",
+                        "description": "Contagem de plantios já colhidos"
+                      },
+                      "produtividade_total_kg": {
+                        "type": "number",
+                        "format": "float",
+                        "description": "Soma do peso de todas as colheitas"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Usuario": {
+        "type": "object",
+        "properties": {
+          "id_usuario": {
+            "type": "integer",
+            "readOnly": true
+          },
+          "nome": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "perfil": {
+            "type": "string",
+            "enum": [
+              "ADMIN",
+              "OPERACIONAL"
+            ]
+          }
+        }
+      },
+      "UsuarioInput": {
+        "type": "object",
+        "required": [
+          "nome",
+          "email",
+          "senha",
+          "perfil"
+        ],
+        "properties": {
+          "nome": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 150
+          },
+          "senha": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "perfil": {
+            "type": "string",
+            "enum": [
+              "ADMIN",
+              "OPERACIONAL"
+            ]
+          }
+        }
+      },
+      "Cultura": {
+        "type": "object",
+        "properties": {
+          "id_cultura": {
+            "type": "integer",
+            "readOnly": true
+          },
+          "nome": {
+            "type": "string"
+          },
+          "tempo_maturacao_dias": {
+            "type": "integer"
+          },
+          "espacamento_ideal": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "CulturaInput": {
+        "type": "object",
+        "required": [
+          "nome",
+          "tempo_maturacao_dias",
+          "espacamento_ideal"
+        ],
+        "properties": {
+          "nome": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "tempo_maturacao_dias": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "espacamento_ideal": {
+            "type": "number",
+            "format": "float",
+            "exclusiveMinimum": true,
+            "minimum": 0
+          }
+        }
+      },
+      "Canteiro": {
+        "type": "object",
+        "properties": {
+          "id_canteiro": {
+            "type": "integer",
+            "readOnly": true
+          },
+          "identificacao": {
+            "type": "string"
+          },
+          "area_m2": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "CanteiroInput": {
+        "type": "object",
+        "required": [
+          "identificacao",
+          "area_m2"
+        ],
+        "properties": {
+          "identificacao": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "area_m2": {
+            "type": "number",
+            "format": "float",
+            "exclusiveMinimum": true,
+            "minimum": 0
+          }
+        }
+      },
+      "Insumo": {
+        "type": "object",
+        "properties": {
+          "id_insumo": {
+            "type": "integer",
+            "readOnly": true
+          },
+          "nome": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "SEMENTE",
+              "FERTILIZANTE",
+              "FERRAMENTA"
+            ]
+          },
+          "quantidade_estoque": {
+            "type": "number",
+            "format": "float"
+          },
+          "estoque_minimo": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "InsumoInput": {
+        "type": "object",
+        "required": [
+          "nome",
+          "tipo",
+          "quantidade_estoque",
+          "estoque_minimo"
+        ],
+        "properties": {
+          "nome": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "SEMENTE",
+              "FERTILIZANTE",
+              "FERRAMENTA"
+            ]
+          },
+          "quantidade_estoque": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0
+          },
+          "estoque_minimo": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0
+          }
+        }
+      },
+      "Plantio": {
+        "type": "object",
+        "properties": {
+          "id_plantio": {
+            "type": "integer",
+            "readOnly": true
+          },
+          "id_cultura": {
+            "type": "integer"
+          },
+          "id_canteiro": {
+            "type": "integer"
+          },
+          "data_plantio": {
+            "type": "string",
+            "format": "date"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "CRESCIMENTO",
+              "COLHIDO",
+              "PERDIDO"
+            ]
+          },
+          "peso_colhido": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          }
+        }
+      },
+      "PlantioInput": {
+        "type": "object",
+        "required": [
+          "id_cultura",
+          "id_canteiro",
+          "data_plantio",
+          "status"
+        ],
+        "properties": {
+          "id_cultura": {
+            "type": "integer"
+          },
+          "id_canteiro": {
+            "type": "integer"
+          },
+          "data_plantio": {
+            "type": "string",
+            "format": "date"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "CRESCIMENTO",
+              "COLHIDO",
+              "PERDIDO"
+            ]
+          },
+          "peso_colhido": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0
+          }
+        }
+      },
+      "Tarefa": {
+        "type": "object",
+        "properties": {
+          "id_tarefa": {
+            "type": "integer",
+            "readOnly": true
+          },
+          "id_usuario": {
+            "type": "integer"
+          },
+          "id_canteiro": {
+            "type": "integer",
+            "nullable": true
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "data_tarefa": {
+            "type": "string",
+            "format": "date"
+          },
+          "hora_inicio": {
+            "type": "string",
+            "format": "time"
+          },
+          "hora_fim": {
+            "type": "string",
+            "format": "time"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDENTE",
+              "CONCLUIDA",
+              "CANCELADA"
+            ]
+          }
+        }
+      },
+      "TarefaInput": {
+        "type": "object",
+        "required": [
+          "id_usuario",
+          "descricao",
+          "data_tarefa",
+          "hora_inicio",
+          "hora_fim",
+          "status"
+        ],
+        "properties": {
+          "id_usuario": {
+            "type": "integer"
+          },
+          "id_canteiro": {
+            "type": "integer"
+          },
+          "descricao": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "data_tarefa": {
+            "type": "string",
+            "format": "date"
+          },
+          "hora_inicio": {
+            "type": "string",
+            "format": "time",
+            "example": "08:00:00"
+          },
+          "hora_fim": {
+            "type": "string",
+            "format": "time",
+            "example": "10:00:00"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDENTE",
+              "CONCLUIDA",
+              "CANCELADA"
+            ]
+          }
+        }
+      },
+      "PlantioInsumo": {
+        "type": "object",
+        "properties": {
+          "id_plantio": {
+            "type": "integer"
+          },
+          "id_insumo": {
+            "type": "integer"
+          },
+          "quantidade_utilizada": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "TarefaInsumo": {
+        "type": "object",
+        "properties": {
+          "id_tarefa": {
+            "type": "integer"
+          },
+          "id_insumo": {
+            "type": "integer"
+          },
+          "quantidade_utilizada": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "InsumoUsoInput": {
+        "type": "object",
+        "required": [
+          "id_insumo",
+          "quantidade_utilizada"
+        ],
+        "properties": {
+          "id_insumo": {
+            "type": "integer"
+          },
+          "quantidade_utilizada": {
+            "type": "number",
+            "format": "float",
+            "exclusiveMinimum": true,
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "responses": {},
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Insira o token JWT para aceder."
+      }
+    },
+    "parameters": {
+      "PathId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "description": "Identificador único (ID) do recurso primário.",
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "PathIdInsumo": {
+        "name": "id_insumo",
+        "in": "path",
+        "required": true,
+        "description": "Identificador único (ID) do insumo.",
+        "schema": {
+          "type": "integer"
+        }
+      }
+    }
+  },
+  "servers": [],
+  "security": []
+}
